@@ -1,3 +1,4 @@
+import { colorsByType } from "@/utils/colors";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
@@ -7,8 +8,10 @@ interface Pokemon {
   weight: number,
   image: string,
   imageBack: string,
-  type: string
+  type: string,
+  url: string
 }
+
 export default function Index() {
   const [pokemons, setPokemons] = useState<Pokemon[]>([])
   useEffect(() => {
@@ -28,7 +31,8 @@ export default function Index() {
           weight: detailedData.weight,
           image: detailedData.sprites.front_default,
           imageBack: detailedData.sprites.back_default,
-          type: detailedData.types[0].type.name
+          type: detailedData.types[0].type.name,
+          url: p.url
         }
       }))
       setPokemons(detailedPokemons)
@@ -41,8 +45,8 @@ export default function Index() {
       <Text style={styles.title}>PokeDex</Text>
       <View style={styles.cardContainer}>
 
-      {pokemons.map((pokemon:Pokemon) => (<Link href="/details" key={pokemon.id}>
-        <View style={styles.card}>
+      {pokemons.map((pokemon:Pokemon) => (<Link href={{pathname: "/details", params:{id:pokemon.id, name:pokemon.name, weight:pokemon.weight, image:pokemon.image, type:pokemon.type, url: pokemon.url}}} key={pokemon.id}>
+        <View style={{...styles.card, backgroundColor: colorsByType[pokemon.type as keyof typeof colorsByType]}}>
           <Text>{pokemon.name.toLocaleUpperCase()}</Text>
         </View>
       </Link>))}
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     justifyContent:"center",
     alignItems:"center",
-    backgroundColor:"lightgreen",
     padding:5,
     // width:"100%",
     textAlign:"center",
@@ -70,5 +73,5 @@ const styles = StyleSheet.create({
     flex:3
   },
   cardContainer: {flexDirection:"row", flexWrap:"wrap", gap:10, fontSize:200, alignItems:"center"},
-  title : {marginBottom:10, fontSize:100, fontWeight:"100"}
+  title : {marginBottom:10, fontSize:50, fontWeight:"100"}
 });
