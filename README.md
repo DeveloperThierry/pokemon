@@ -2,7 +2,8 @@
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
 
-![Screenshot](/images/file.png)
+![Screenshot](public/home.png)
+![Screenshot](public/details_1.png)
 
 ## Description
 A beginner-friendly mobile application built with React Native and Expo that allows users to browse and view details about various Pokémon.
