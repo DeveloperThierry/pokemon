@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 interface Pokemon {
   id: number,
   name: string,
@@ -17,7 +17,7 @@ export default function Index() {
 
   const fetchPokemons = async () => {
     try {
-      const res = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=20")
+      const res = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=50")
       const data = await res.json()
       const detailedPokemons = await Promise.all(data.results.map(async (p:any) => {
         const detailedRes = await fetch(p.url)
@@ -37,21 +37,38 @@ export default function Index() {
     }
   }
   return (
-    <ScrollView >
-      <Text>PokeDex</Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>PokeDex</Text>
+      <View style={styles.cardContainer}>
+
       {pokemons.map((pokemon:Pokemon) => (<Link href="/details" key={pokemon.id}>
-        <View>
-          <Text>{pokemon.name}</Text>
+        <View style={styles.card}>
+          <Text>{pokemon.name.toLocaleUpperCase()}</Text>
         </View>
       </Link>))}
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+  container:{margin:10, padding:10},
+  card: {
+    flexDirection:"row",
+    justifyContent:"center",
+    alignItems:"center",
+    backgroundColor:"lightgreen",
+    padding:5,
+    // width:"100%",
+    textAlign:"center",
+    textAlignVertical:"center",
+    paddingLeft:10,
+    borderWidth:1,
+    borderRadius:100,
+    paddingVertical:10,
+    paddingHorizontal:20,
+    flex:3
   },
+  cardContainer: {flexDirection:"row", flexWrap:"wrap", gap:10, fontSize:200, alignItems:"center"},
+  title : {marginBottom:10, fontSize:100, fontWeight:"100"}
 });
